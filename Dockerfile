@@ -12,11 +12,14 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
+RUN addgroup -S springgroup && adduser -S springuser -G springgroup
 
 COPY --from=build /app/target/Springboot-API-REST-DESPACHO-0.0.1-SNAPSHOT.jar app.jar
 
+RUN chown springuser:springgroup app.jar
+
+USER springuser
+
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
