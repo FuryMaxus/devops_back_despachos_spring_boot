@@ -3,23 +3,35 @@
 # Microservicio de Despacho 
 
 ## 1. Descripción
-Módulo desacoplado para la gestión logística, desplegado en instancia EC2 independiente.
+Lógica de negocio y persistencia para el módulo de Despacho (Spring Boot + MySQL).
 
-## 2. Características Técnicas
-* **Dockerfile:** Optimizado para bajo consumo de recursos y seguridad (usuario nginx/spring).
-* **Puerto:** Operación en el puerto `8081` para evitar colisiones y permitir integración con el Front.
-* **Orquestación:** Docker Compose habilitado para despliegue conjunto de App + DB.
+## 2. Arquitectura y Resiliencia
+* **Persistencia:** Uso de **Named Volumes** para asegurar la integridad de los datos en AWS EC2.
+* **Healthcheck:** Orquestación configurada para que el backend espere la disponibilidad de la base de datos.
+* **Políticas de Reinicio:** Configurado con `restart: always` para asegurar continuidad operativa.
 
-## 3. Automatización (Zero Trust)
-Pipeline de despliegue continuo que utiliza **AWS Systems Manager** para actualizar contenedores de forma segura, manteniendo los Security Groups cerrados (sin puerto 22).
-
+## 3. Pipeline CI/CD
+Flujo automatizado hacia **Amazon ECR** y despliegue mediante agentes **SSM**. Gestión de credenciales mediante GitHub Secrets.
+### Es necesario definir las siguientes variables con secretos en el repositorio para el funcionamiento del pipeline:
+#### Las 4 siguientes se obtienes desde aws
+* `AWS_ACCESS_KEY_ID`
+* `AWS_SECRET_ACCESS_KEY`
+* `AWS_SESSION_TOKEN`
+* `EC2_INSTANCE_ID`
+#### Las 3 siguientes se definen a conveniencia:
+* `DB_NAME`
+* `DB_USER`
+* `DB_PASSWORD`
 ## 4. Ejecución Local
-Prepare su entorno local creando un archivo `.env` con:
-* `DB_NAME=despacho_db`
-* `DB_USER=root`
-* `DB_PASSWORD=su_password`
-* `REGISTRY=local`
-
-Luego ejecute:
+Cree un archivo `.env` en la raíz con estas variables antes de iniciar:
+#### Las 3 siguientes son obligatorias 
+* `DB_NAME`
+* `DB_USER`
+* `DB_PASSWORD`
+#### Las 2 siguientes son opcionales, si no se ingresa valor se usara uno por defecto:
+* `REGISTRY`
+* `REPO`
+  
+Inicie el stack con:
 ```bash
 docker compose up -d
