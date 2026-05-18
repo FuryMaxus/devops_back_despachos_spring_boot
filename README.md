@@ -22,6 +22,7 @@ Flujo automatizado hacia **Amazon ECR** y despliegue mediante agentes **SSM**. G
 * `DB_NAME`
 * `DB_USER`
 * `DB_PASSWORD`
+* `HOST_PORT` (por defecto 8081)
 ## 4. Ejecución Local
 Cree un archivo `.env` en la raíz con estas variables antes de iniciar:
 #### Las 3 siguientes son obligatorias 
@@ -31,7 +32,8 @@ Cree un archivo `.env` en la raíz con estas variables antes de iniciar:
 #### Las 2 siguientes son opcionales, si no se ingresa valor se usara uno por defecto:
 * `REGISTRY`
 * `REPO`
-  
+* `HOST_PORT` (por defecto 8081)
+
 Inicie el stack con:
 ```bash
 docker compose up -d
