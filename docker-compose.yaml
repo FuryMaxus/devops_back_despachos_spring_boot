@@ -21,6 +21,7 @@ services:
       retries: 5
 
   backend-despacho:
+    build: .
     image: ${REGISTRY}/${REPO}:latest
     container_name: backend-despacho
     restart: always
@@ -32,7 +33,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "8081:8081"
+      - "${HOST_PORT:-8081}:8081"
 
 volumes:
   mysql_data_prod:
